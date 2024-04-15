@@ -14,6 +14,7 @@ var move_mode : MoveMode = MoveMode.ORBIT
 var target : Node2D
 var controller : Node2D : set = set_controller
 var team : int : get = get_team
+var freezetime := 0.0
 
 
 func _ready()->void:
@@ -25,6 +26,10 @@ func _ready()->void:
 
 
 func _physics_process(delta:float)->void:
+	if freezetime > 0:
+		freezetime -= delta
+		return
+	
 	if is_instance_valid(target):
 		var direction := get_angle_to(target.global_position)
 		
@@ -37,16 +42,32 @@ func _physics_process(delta:float)->void:
 		elif move_mode == MoveMode.CHASE:
 			if distance_sqrd_to(target) > 9:
 				move_and_collide(Vector2.RIGHT.rotated(direction) * speed * delta)
+			else:
+				resolve_collision()
 		
 		$PolygonGenerator.rotation = direction
 	
 	get_closest_target()
 
 
+func resolve_collision()->void:
+	apply_effect(target)
+	if target.has_method("apply_effect"):
+		target.apply_effect(self)
+
+
+func apply_effect(_to:Object)->void:
+	pass
+
+
 func get_closest_target()->void:
 	for node in targeting_area.get_overlapping_bodies():
 		if is_possible_target(node):
-			if distance_sqrd_to(node) < distance_sqrd_to(target):
+			if is_instance_valid(target):
+				if distance_sqrd_to(node) < distance_sqrd_to(target):
+					target = node
+					move_mode = MoveMode.CHASE
+			else:
 				target = node
 				move_mode = MoveMode.CHASE
 	
@@ -55,8 +76,8 @@ func get_closest_target()->void:
 		move_mode = MoveMode.ORBIT
 
 
-func is_possible_target(node:PhysicsBody2D)->bool:
-	if node == self:
+func is_possible_target(node:Node)->bool:
+	if node == self or not is_instance_valid(node):
 		return false
 	match target_type:
 		TargetType.ENEMY:
