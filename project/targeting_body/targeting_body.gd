@@ -13,6 +13,7 @@ var targeting_area : Area2D
 var move_mode : MoveMode = MoveMode.ORBIT
 var target : Node2D
 var controller : Node2D : set = set_controller
+var team : int : get = get_team
 
 
 func _ready()->void:
@@ -55,6 +56,10 @@ func is_possible_target(node:PhysicsBody2D)->bool:
 	if node == self:
 		return false
 	match target_type:
+		TargetType.ENEMY:
+			if node.team != get_team():
+				return true
+			return false
 		_:
 			return true
 
@@ -67,3 +72,7 @@ func distance_sqrd_to(object:Node2D)->float:
 
 func set_controller(value:Node2D)->void:
 	controller = value
+
+
+func get_team()->int:
+	return controller.team

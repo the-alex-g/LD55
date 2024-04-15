@@ -46,6 +46,13 @@ spawn_drone={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="obstacles"
+2d_physics/layer_2="targetable"
+2d_physics/layer_3="drones"
+2d_physics/layer_4="player"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
