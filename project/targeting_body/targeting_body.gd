@@ -33,9 +33,12 @@ func _physics_process(delta:float)->void:
 				direction += PI
 			elif distance_sqrd_to(target) < pow(ORBIT_DISTANCE, 2):
 				direction += PI / 2
+			move_and_collide(Vector2.RIGHT.rotated(direction) * speed * delta / 2)
+		elif move_mode == MoveMode.CHASE:
+			if distance_sqrd_to(target) > 9:
+				move_and_collide(Vector2.RIGHT.rotated(direction) * speed * delta)
 		
 		$PolygonGenerator.rotation = direction
-		move_and_collide(Vector2.RIGHT.rotated(direction) * speed * delta)
 	
 	get_closest_target()
 
