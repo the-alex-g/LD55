@@ -8,6 +8,7 @@ const ORBIT_DISTANCE := 50
 
 @export var speed := 200.0
 @export var target_type : TargetType = TargetType.ENEMY
+@export var always_orbit_controller := false
 
 var targeting_area : Area2D
 var move_mode : MoveMode = MoveMode.ORBIT
@@ -31,23 +32,36 @@ func _physics_process(delta:float)->void:
 		return
 	
 	if is_instance_valid(target):
-		var direction := get_angle_to(target.global_position)
-		
-		if move_mode == MoveMode.ORBIT:
-			if distance_sqrd_to(target) < pow(ORBIT_DISTANCE, 2) / 4:
-				direction += PI
-			elif distance_sqrd_to(target) < pow(ORBIT_DISTANCE, 2):
-				direction += PI / 2
-			move_and_collide(Vector2.RIGHT.rotated(direction) * speed * delta / 2)
+		if always_orbit_controller:
+			move_and_collide(
+				Vector2.RIGHT.rotated(get_orbit_angle(controller)) * speed * delta / 2
+			)
+		elif move_mode == MoveMode.ORBIT:
+			move_and_collide(
+				Vector2.RIGHT.rotated(get_orbit_angle(target)) * speed * delta / 2
+			)
 		elif move_mode == MoveMode.CHASE:
 			if distance_sqrd_to(target) > 9:
-				move_and_collide(Vector2.RIGHT.rotated(direction) * speed * delta)
+				move_and_collide(
+					Vector2.RIGHT.rotated(
+						get_angle_to(target.global_position)
+					) * speed * delta
+				)
 			else:
 				resolve_collision()
 		
-		$PolygonGenerator.rotation = direction
+		$PolygonGenerator.rotation = get_angle_to(target.global_position)
 	
 	get_closest_target()
+
+
+func get_orbit_angle(to:Node2D)->float:
+	var direction := get_angle_to(to.global_position)
+	if distance_sqrd_to(to) < pow(ORBIT_DISTANCE, 2) / 4:
+		direction += PI
+	elif distance_sqrd_to(to) < pow(ORBIT_DISTANCE, 2):
+		direction += PI / 2
+	return direction
 
 
 func resolve_collision()->void:
