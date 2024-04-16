@@ -1,16 +1,18 @@
 [gd_scene load_steps=4 format=3 uid="uid://bul8vv5tayy7h"]
 
-[ext_resource type="Script" path="res://drones/attack_drone.gd" id="1_qp0wg"]
+[ext_resource type="Script" path="res://drones/drone.gd" id="1_i0x05"]
 [ext_resource type="Script" path="res://polygons/polygon_generator.gd" id="2_a5ohs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_j42oc"]
 
 [node name="Drone" type="CharacterBody2D"]
 collision_layer = 6
-script = ExtResource("1_qp0wg")
+script = ExtResource("1_i0x05")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_j42oc")
 
 [node name="PolygonGenerator" type="Node2D" parent="."]
 script = ExtResource("2_a5ohs")
+radius = 6.0
+ring_thickness = 1.0

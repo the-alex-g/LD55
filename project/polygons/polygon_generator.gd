@@ -7,6 +7,7 @@ extends Node2D
 @export var rings := 0 : set = set_rings
 @export var ring_color := Color.BLACK : set = set_ring_color
 @export var color := Color.RED : set = set_color
+@export var ring_thickness := 2.0 : set = set_ring_thickness
 
 var polygon : PackedVector2Array = []
 var ring_polygons := []
@@ -69,8 +70,13 @@ func set_ring_color(value:Color)->void:
 	queue_redraw()
 
 
+func set_ring_thickness(value:float)->void:
+	ring_thickness = value
+	queue_redraw()
+
+
 func _draw()->void:
 	draw_colored_polygon(polygon, color)
 	
 	for ring in ring_polygons:
-		draw_polyline(ring, ring_color, 2)
+		draw_polyline(ring, ring_color, ring_thickness)

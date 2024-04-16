@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://bovx1g05b81w4"]
+
+[ext_resource type="PackedScene" uid="uid://bul8vv5tayy7h" path="res://drones/drone.tscn" id="1_xp81g"]
+[ext_resource type="Script" path="res://drones/attack_drone.gd" id="2_nyedb"]
+
+[node name="AttackDrone" instance=ExtResource("1_xp81g")]
+script = ExtResource("2_nyedb")
+damage = 1

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://bl8jqwhn7fpnx"]
+
+[ext_resource type="PackedScene" uid="uid://bul8vv5tayy7h" path="res://drones/drone.tscn" id="1_hdayo"]
+[ext_resource type="Script" path="res://drones/repair_drone.gd" id="2_q6w81"]
+
+[node name="RepairDrone" instance=ExtResource("1_hdayo")]
+script = ExtResource("2_q6w81")
+heal_amount = 5
+target_type = 1
+always_orbit_controller = true
+
+[node name="Timer" type="Timer" parent="." index="2"]

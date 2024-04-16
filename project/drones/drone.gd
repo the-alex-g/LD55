@@ -5,6 +5,8 @@ const KNOCKBACK_MAGNITUDE := 10
 
 @export var health := 5 : set = set_health
 
+@onready var _polygon_generator : PolygonGenerator = $PolygonGenerator
+
 
 func _ready()->void:
 	health += randi_range(-1, 1)
@@ -25,3 +27,12 @@ func set_health(value:int)->void:
 	health = value
 	if health <= 0:
 		queue_free()
+
+
+func set_rings(count:int, color:Color)->void:
+	if is_inside_tree():
+		_polygon_generator.rings = count
+		_polygon_generator.ring_color = color
+	else:
+		await ready
+		set_rings(count, color)

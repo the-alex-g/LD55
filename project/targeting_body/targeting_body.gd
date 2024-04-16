@@ -1,7 +1,7 @@
 class_name TargetingBody
 extends CharacterBody2D
 
-enum TargetType {ENEMY}
+enum TargetType {ENEMY, CONTROLLER}
 enum MoveMode {ORBIT, CHASE}
 
 const ORBIT_DISTANCE := 50
@@ -85,7 +85,7 @@ func get_closest_target()->void:
 				target = node
 				move_mode = MoveMode.CHASE
 	
-	if not is_instance_valid(target) or target == controller:
+	if not is_instance_valid(target):
 		target = controller
 		move_mode = MoveMode.ORBIT
 
@@ -96,6 +96,10 @@ func is_possible_target(node:Node)->bool:
 	match target_type:
 		TargetType.ENEMY:
 			if node.team != get_team():
+				return true
+			return false
+		TargetType.CONTROLLER:
+			if node == controller:
 				return true
 			return false
 		_:
