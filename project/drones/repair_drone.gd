@@ -13,5 +13,6 @@ func _ready()->void:
 
 
 func apply_effect(to:Object)->void:
-	to.health += heal_amount + randi_range(-1, 1)
-	queue_free()
+	if not always_orbit_controller:
+		to.health += heal_amount + randi_range(-1, 1)
+		queue_free()

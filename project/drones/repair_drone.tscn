@@ -6,8 +6,12 @@
 [node name="RepairDrone" instance=ExtResource("1_hdayo")]
 script = ExtResource("2_q6w81")
 heal_amount = 5
+health = 5
+speed = 200.0
 target_type = 1
 always_orbit_controller = true
+contact_distance = 3.0
+retribution_allowed = true
 
 [node name="PolygonGenerator" parent="." index="1"]
 color = Color(0.12549, 0.929412, 0.12549, 1)

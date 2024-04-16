@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://bq4q4goh2dcej"]
+
+[ext_resource type="Script" path="res://polygons/polygon_generator.gd" id="1_1ir6m"]
+[ext_resource type="Script" path="res://drones/bullets/bullet.gd" id="1_5bd5j"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pwh7l"]
+radius = 6.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hjefr"]
+radius = 7.0
+
+[node name="Bullet" type="CharacterBody2D"]
+collision_layer = 2
+script = ExtResource("1_5bd5j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_pwh7l")
+
+[node name="PolygonGenerator" type="Node2D" parent="."]
+script = ExtResource("1_1ir6m")
+points = 10
+radius = 4.0
+rings = 1
+ring_thickness = 1.0
+
+[node name="HitArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 12
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea"]
+shape = SubResource("CircleShape2D_hjefr")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="body_entered" from="HitArea" to="." method="_on_hit_area_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

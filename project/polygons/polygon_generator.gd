@@ -34,7 +34,9 @@ func _update_rings()->void:
 	for i in rings:
 		var ring_polygon : PackedVector2Array = []
 		for p in points + 1:
-			ring_polygon.append(Vector2.RIGHT.rotated(p * TAU / points) * (radius + 4 + 5 * i))
+			ring_polygon.append(
+				Vector2.RIGHT.rotated(p * TAU / points) * (radius + (2 + 2.5 * i) * ring_thickness)
+			)
 		ring_polygons.append(ring_polygon)
 	queue_redraw()
 

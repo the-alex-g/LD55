@@ -9,6 +9,9 @@ const ORBIT_DISTANCE := 50
 @export var speed := 200.0
 @export var target_type : TargetType = TargetType.ENEMY
 @export var always_orbit_controller := false
+@export var contact_distance := 3.0
+@export var retribution_allowed := true
+@export var retain_target := false
 
 var targeting_area : Area2D
 var move_mode : MoveMode = MoveMode.ORBIT
@@ -41,18 +44,19 @@ func _physics_process(delta:float)->void:
 				Vector2.RIGHT.rotated(get_orbit_angle(target)) * speed * delta / 2
 			)
 		elif move_mode == MoveMode.CHASE:
-			if distance_sqrd_to(target) > 9:
+			if distance_sqrd_to(target) > pow(contact_distance, 2):
 				move_and_collide(
 					Vector2.RIGHT.rotated(
 						get_angle_to(target.global_position)
 					) * speed * delta
 				)
-			else:
-				resolve_collision()
+		if distance_sqrd_to(target) < pow(contact_distance, 2):
+			resolve_collision()
 		
 		$PolygonGenerator.rotation = get_angle_to(target.global_position)
 	
-	get_closest_target()
+	if not retain_target or not is_instance_valid(target) or move_mode != MoveMode.CHASE:
+		get_closest_target()
 
 
 func get_orbit_angle(to:Node2D)->float:
@@ -66,7 +70,7 @@ func get_orbit_angle(to:Node2D)->float:
 
 func resolve_collision()->void:
 	apply_effect(target)
-	if target.has_method("apply_effect"):
+	if target.has_method("apply_effect") and retribution_allowed:
 		target.apply_effect(self)
 
 
@@ -77,7 +81,7 @@ func apply_effect(_to:Object)->void:
 func get_closest_target()->void:
 	for node in targeting_area.get_overlapping_bodies():
 		if is_possible_target(node):
-			if is_instance_valid(target):
+			if is_instance_valid(target) and move_mode == MoveMode.CHASE:
 				if distance_sqrd_to(node) < distance_sqrd_to(target):
 					target = node
 					move_mode = MoveMode.CHASE
@@ -95,7 +99,7 @@ func is_possible_target(node:Node)->bool:
 		return false
 	match target_type:
 		TargetType.ENEMY:
-			if node.team != get_team():
+			if node.team != get_team() and not node is Bullet:
 				return true
 			return false
 		TargetType.CONTROLLER:

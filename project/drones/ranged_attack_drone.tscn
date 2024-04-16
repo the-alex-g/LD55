@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cwhnbunsnnpsd"]
+
+[ext_resource type="PackedScene" uid="uid://bul8vv5tayy7h" path="res://drones/drone.tscn" id="1_g1tpq"]
+[ext_resource type="Script" path="res://drones/ranged_attack_drone.gd" id="2_qk2cl"]
+[ext_resource type="PackedScene" uid="uid://7o5ea7l2lx4e" path="res://targeting_body/targeting_area.tscn" id="3_6we3q"]
+
+[node name="RangedAttackDrone" instance=ExtResource("1_g1tpq")]
+script = ExtResource("2_qk2cl")
+damage = 1
+reload_time = 1.0
+health = 5
+speed = 200.0
+target_type = 0
+always_orbit_controller = true
+contact_distance = 200.0
+retribution_allowed = false
+retain_target = true
+
+[node name="PolygonGenerator" parent="." index="1"]
+points = 4
+
+[node name="TargetingArea" parent="." index="2" instance=ExtResource("3_6we3q")]
+radius = 200.0

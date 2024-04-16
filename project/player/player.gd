@@ -14,6 +14,8 @@ func _physics_process(delta:float)->void:
 		spawn_drone("attack_drone")
 	if Input.is_action_just_pressed("defense_drone"):
 		pass
+	if Input.is_action_just_pressed("ranged_attack_drone"):
+		spawn_drone("ranged_attack_drone")
 	
 	var movement_vector := Input.get_vector("left", "right", "up", "down")
 	move_and_collide(movement_vector * delta * speed)
