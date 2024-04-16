@@ -9,4 +9,7 @@ heal_amount = 5
 target_type = 1
 always_orbit_controller = true
 
+[node name="PolygonGenerator" parent="." index="1"]
+color = Color(0.12549, 0.929412, 0.12549, 1)
+
 [node name="Timer" type="Timer" parent="." index="2"]
